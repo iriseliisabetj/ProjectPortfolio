@@ -1,0 +1,48 @@
+@page
+@model WebApp.Pages.Configs.IndexModel
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Configurations List</h1>
+
+<p>
+    <a asp-page="Create" class="btn btn-primary">Create New Configuration</a>
+</p>
+
+<table class="table">
+    <thead>
+    <tr>
+        <th>@Html.DisplayNameFor(model => model.Configurations[0].ConfigName)</th>
+        <th>@Html.DisplayNameFor(model => model.Configurations[0].BoardSizeWidth)</th>
+        <th>@Html.DisplayNameFor(model => model.Configurations[0].BoardSizeHeight)</th>
+        <th>@Html.DisplayNameFor(model => model.Configurations[0].GridSizeWidth)</th>
+        <th>@Html.DisplayNameFor(model => model.Configurations[0].GridSizeHeight)</th>
+        <th>@Html.DisplayNameFor(model => model.Configurations[0].WinCondition)</th>
+        <th>@Html.DisplayNameFor(model => model.Configurations[0].PiecesPerPlayer)</th>
+        <th>@Html.DisplayNameFor(model => model.Configurations[0].MovePieceAfterNMoves)</th>
+        <th></th>
+    </tr>
+    </thead>
+    <tbody>
+    @foreach (var config in Model.Configurations)
+    {
+        <tr>
+            <td>@config.ConfigName</td>
+            <td>@config.BoardSizeWidth</td>
+            <td>@config.BoardSizeHeight</td>
+            <td>@config.GridSizeWidth</td>
+            <td>@config.GridSizeHeight</td>
+            <td>@config.WinCondition</td>
+            <td>@config.PiecesPerPlayer</td>
+            <td>@config.MovePieceAfterNMoves</td>
+            <td>
+                <a asp-page="./Edit" asp-route-name="@config.ConfigName" class="btn btn-warning">Edit</a> |
+                <a asp-page="./Details" asp-route-name="@config.ConfigName" class="btn btn-info">Details</a> |
+                <a asp-page="./Delete" asp-route-name="@config.ConfigName" class="btn btn-danger">Delete</a>
+            </td>
+        </tr>
+    }
+    </tbody>
+</table>

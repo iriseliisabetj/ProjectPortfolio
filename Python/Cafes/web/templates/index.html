@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Kohvikud</title>
+    <link rel="stylesheet" href="../static/css/styles.css">
+</head>
+<body>
+    <h1>TalTechi kohvikud</h1>
+
+    <form method="POST" action="/search_open">
+        <label for="start">Algusaeg (HH:MM):</label>
+        <input type="text" name="start" id="start" value="{{ start if start else '' }}">
+        <label for="end">Lõppaeg (HH:MM):</label>
+        <input type="text" name="end" id="end" value="{{ end if end else '' }}">
+        <button type="submit">Otsi</button>
+    </form>
+
+
+    <table border="1">
+        <tr>
+            <th>Id</th>
+            <th>Nimi</th>
+            <th>Aadress</th>
+            <th>Avaneb</th>
+            <th>Sulgeb</th>
+            <th>Muuda</th>
+            <th>Kustuta</th>
+        </tr>
+        {% for c in cafes %}
+        <tr>
+            <td>{{ c.id }}</td>
+            <td>{{ c.name }}</td>
+            <td>{{ c.location }}</td>
+            <td>{{ c.time_open }}</td>
+            <td>{{ c.time_closed }}</td>
+            <td><a href="/edit_cafe/{{ c.id }}">Muuda</a></td>
+            <td><a href="/delete_cafe/{{ c.id }}">Kustuta</a></td>
+        </tr>
+        {% endfor %}
+    </table>
+
+
+    <h2>Lisa uus kohvik</h2>
+    <form method="POST" action="/add_cafe">
+        <label>Nimi:</label><input type="text" name="name"><br>
+        <label>Aadress:</label><input type="text" name="location"><br>
+        <label>Avaneb:</label><input type="text" name="time_open"><br>
+        <label>Sulgeb:</label><input type="text" name="time_closed"><br>
+        <button type="submit">Lisa</button>
+    </form>
+</body>
+</html>

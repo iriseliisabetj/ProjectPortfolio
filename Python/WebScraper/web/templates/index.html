@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Products</title>
+    <link rel="stylesheet" href="../static/css/styles.css">
+</head>
+<body>
+    <h1>All Products</h1>
+
+    <form action="/filter" method="POST">
+        <label>Show products more expensive than: </label>
+        <input type="number" name="price" placeholder="Enter price" required>
+        <button type="submit">Filter</button>
+    </form>
+
+    <br>
+
+    <table border="1">
+        <tr>
+            <th>Id</th>
+            <th>Title</th>
+            <th>Price</th>
+            <th>Image</th>
+            <th>Product Link</th>
+        </tr>
+        {% for product in products %}
+        <tr>
+            <td>{{ product.id }}</td>
+            <td>{{ product.title }}</td>
+            <td>{{ product.price }}€</td>
+            <td><img src="{{ product.image }}" alt="Product Image" width="100"></td>
+            <td><a href="{{ product.product_url }}" target="_blank">View Product</a></td>
+        </tr>
+        {% endfor %}
+    </table>
+</body>
+</html>

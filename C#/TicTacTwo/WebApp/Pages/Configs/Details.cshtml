@@ -1,0 +1,67 @@
+@page
+@model WebApp.Pages.Configs.DetailsModel
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h1>Configuration Details</h1>
+
+<div>
+    <h4>Configuration</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Configuration.ConfigName)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Configuration.ConfigName)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Configuration.BoardSizeWidth)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Configuration.BoardSizeWidth)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Configuration.BoardSizeHeight)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Configuration.BoardSizeHeight)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Configuration.GridSizeWidth)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Configuration.GridSizeWidth)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Configuration.GridSizeHeight)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Configuration.GridSizeHeight)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Configuration.WinCondition)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Configuration.WinCondition)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Configuration.PiecesPerPlayer)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Configuration.PiecesPerPlayer)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Configuration.MovePieceAfterNMoves)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Configuration.MovePieceAfterNMoves)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-page="Edit" asp-route-name="@Model.Configuration.ConfigName" class="btn btn-warning">Edit</a> |
+    <a asp-page="Index" class="btn btn-secondary">Back to List</a>
+</div>

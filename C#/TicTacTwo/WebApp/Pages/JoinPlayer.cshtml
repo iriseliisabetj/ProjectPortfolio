@@ -1,0 +1,40 @@
+@page
+@model WebApp.Pages.JoinPlayer
+
+@{
+    ViewData["Title"] = "Join Game";
+}
+
+<h1>Join Game as Player @Model.PlayerRole</h1>
+<p>Game Name: @Model.Game.GameName</p>
+
+@if (!string.IsNullOrEmpty(Model.PlayerRole))
+{
+    <form method="post">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <input type="hidden" asp-for="GameId" />
+        <input type="hidden" asp-for="PlayerRole" />
+
+        @if ((Model.PlayerRole == "X" && !string.IsNullOrEmpty(Model.Game.PlayerXPass)) ||
+             (Model.PlayerRole == "O" && !string.IsNullOrEmpty(Model.Game.PlayerOPass)) || 
+             (Model.PlayerRole == "Spectator" && !string.IsNullOrEmpty(Model.Game.PlayerXPass)))
+        {
+            <div class="form-group">
+                <label for="Password" class="control-label">Password</label>
+                <input type="password" name="Password" class="form-control" required />
+            </div>
+        }
+
+        <div class="form-group mt-3">
+            <input type="submit" value="Join Game" class="btn btn-primary" />
+        </div>
+    </form>
+}
+else
+{
+    <p>Player role not specified.</p>
+}
+
+<div class="mt-3">
+    <a asp-page="Multiplayer" asp-route-GameId="@Model.Game.Id">Back to Game Landing</a>
+</div>

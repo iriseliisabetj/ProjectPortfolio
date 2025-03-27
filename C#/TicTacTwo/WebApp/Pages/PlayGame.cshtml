@@ -1,0 +1,230 @@
+@page
+@using GameBrain
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@model WebApp.Pages.PlayGame
+
+<h1>Play Game</h1>
+
+@if (!ModelState.IsValid)
+{
+    <div class="alert alert-danger">
+        @foreach (var error in ModelState.Values.SelectMany(v => v.Errors))
+        {
+            <p>@error.ErrorMessage</p>
+        }
+    </div>
+}
+
+<p><strong>Game:</strong> @Model.GameName</p>
+<p><strong>Current Turn:</strong> @(Model.TicTacTwoBrain != null ? Model.TicTacTwoBrain.GetCurrentTurn() : "N/A")</p>
+<p><strong>Remaining pieces for X:</strong> @Model.RemainingPiecesX</p>
+<p><strong>Remaining pieces for O:</strong> @Model.RemainingPiecesO</p>
+
+@if (!string.IsNullOrEmpty(Model.PlayerRole))
+{
+    <p><strong>You are playing as: @Model.PlayerRole</strong></p>
+}
+
+@if (!string.IsNullOrEmpty(Model.Message))
+{
+    <div class="alert alert-info">
+        @Model.Message
+    </div>
+}
+
+@if (Model.TicTacTwoBrain != null && Model.TicTacTwoBrain.GameType == GameType.PlayerVsAi
+                                  && Model.TicTacTwoBrain.GetCurrentTurn() == EGamePiece.O
+                                  && !Model.IsVictory)
+{
+    <form id="aiMoveForm" method="post" asp-page-handler="AiMove" class="d-inline">
+        <input type="hidden" name="GameId" value="@Model.GameId" />
+        <input type="hidden" name="PlayerRole" value="@Model.PlayerRole" />
+        <input type="hidden" name="mode" value="" />
+        <button type="button" class="btn btn-info" onclick="letAiMove()">
+            Let AI Make Next Move
+        </button>
+    </form>
+}
+
+@if (Model.TicTacTwoBrain != null && Model.TicTacTwoBrain.GameType == GameType.AiVsAi 
+                                  && Model.PlayerRole == "Spectator" && !Model.IsVictory)
+{
+    <form id="aiMoveForm" method="post" asp-page-handler="AiMove" class="d-inline">
+        <input type="hidden" name="GameId" value="@Model.GameId" />
+        <input type="hidden" name="PlayerRole" value="@Model.PlayerRole" />
+        <input type="hidden" name="mode" value="" />
+        <button type="button" class="btn btn-info" onclick="letAiMove()">
+            Let Next AI Move
+        </button>
+    </form>
+}
+
+@if (Model.TicTacTwoBrain != null)
+{
+    <div class="action-buttons mb-3">
+        @if (Model.IsSpecialMoveAllowed && Model.PlayerRole == Model.TicTacTwoBrain.GetCurrentTurn().ToString())
+        {
+            <form method="post" asp-page-handler="PlacePiece" class="d-inline">
+                <input type="hidden" name="GameId" value="@Model.GameId" />
+                <input type="hidden" name="PlayerRole" value="@Model.PlayerRole" />
+                <button type="submit" class="btn btn-primary">Place Piece</button>
+            </form>
+            
+            <form method="post" asp-page-handler="StartMoveGrid" class="d-inline">
+                <input type="hidden" name="GameId" value="@Model.GameId" />
+                <input type="hidden" name="PlayerRole" value="@Model.PlayerRole" />
+                <button type="submit" class="btn btn-primary">Move Grid</button>
+            </form>
+
+            <form method="post" asp-page-handler="StartMovePiece" class="d-inline">
+                <input type="hidden" name="GameId" value="@Model.GameId" />
+                <input type="hidden" name="PlayerRole" value="@Model.PlayerRole" />
+                <button type="submit" class="btn btn-primary">Move Piece</button>
+            </form>
+        }
+    </div>
+
+    @if (Model.PlacePieceActive && Model.PlayerRole == Model.TicTacTwoBrain.GetCurrentTurn().ToString())
+    {
+        <div class="alert alert-info">
+            <strong>Place Piece Active:</strong> Click on an empty cell to place your piece.
+        </div>
+    }
+
+    @if (Model.IsMovePieceActive && Model.PlayerRole == Model.TicTacTwoBrain.GetCurrentTurn().ToString())
+    {
+        <div class="alert alert-info">
+            <strong>Move Piece Active:</strong> Click on your piece to select it, then click on the destination cell.
+        </div>
+    }
+
+    @if (Model.IsSpecialMoveAllowed && Model.ShowMoveGridOptions 
+                                    && Model.PlayerRole == Model.TicTacTwoBrain.GetCurrentTurn().ToString())
+    {
+        <div class="direction-buttons mt-3">
+            <form method="post" asp-page-handler="MoveGrid">
+                <input type="hidden" name="GameId" value="@Model.GameId" />
+                <input type="hidden" name="PlayerRole" value="@Model.PlayerRole" />
+                <input type="hidden" name="mode" value="MoveGrid" />
+                @foreach (var direction in Model.Directions)
+                {
+                    <button type="submit" name="direction" value="@direction.Value" class="btn btn-secondary m-1">
+                        @direction.Text
+                    </button>
+                }
+            </form>
+        </div>
+    }
+    
+    <div class="board-container mt-4">
+        <table class="game-board" id="gameBoard">
+            @for (int y = 0; y < Model.GameConfiguration.BoardSizeHeight; y++)
+            {
+                <tr>
+                    @for (int x = 0; x < Model.GameConfiguration.BoardSizeWidth; x++)
+                    {
+                        var piece = Model.TicTacTwoBrain.GameBoard[x][y];
+                        bool isGridCell = x >= Model.GridStartX && x <= Model.GridEndX 
+                                          && y >= Model.GridStartY && y <= Model.GridEndY;
+
+                        string cellClass = "board-cell";
+                        if (isGridCell) cellClass += " grid-cell";
+                        if (piece == EGamePiece.X) cellClass += " player-x";
+                        else if (piece == EGamePiece.O) cellClass += " player-o";
+
+                        <td class="@cellClass">
+                            @if (Model.PlayerRole == Model.TicTacTwoBrain.GetCurrentTurn().ToString())
+                            {
+                                @if (Model.PlacePieceActive || piece == EGamePiece.Empty && !Model.IsMovePieceActive)
+                                {
+                                    <a asp-page="./PlayGame"
+                                       asp-route-GameId="@Model.GameId"
+                                       asp-route-PlayerRole="@Model.PlayerRole"
+                                       asp-route-mode="PlacePiece"
+                                       asp-route-x="@x"
+                                       asp-route-y="@y">
+                                    </a>
+                                }
+                                else if (Model.IsMovePieceActive && piece == Model.TicTacTwoBrain.GetCurrentTurn())
+                                {
+                                    <a asp-page="./PlayGame"
+                                       asp-route-GameId="@Model.GameId"
+                                       asp-route-PlayerRole="@Model.PlayerRole"
+                                       asp-route-mode="MovePiece"
+                                       asp-route-sourceX="@x"
+                                       asp-route-sourceY="@y">
+                                    </a>
+                                }
+                                else if (Model.IsMovePieceActive && piece == EGamePiece.Empty && TempData["SourceX"] != null && TempData["SourceY"] != null)
+                                {
+                                    <a asp-page="./PlayGame"
+                                       asp-route-GameId="@Model.GameId"
+                                       asp-route-PlayerRole="@Model.PlayerRole"
+                                       asp-route-mode="MovePiece"
+                                       asp-route-sourceX="@TempData["SourceX"]"
+                                       asp-route-sourceY="@TempData["SourceY"]"
+                                       asp-route-destX="@x"
+                                       asp-route-destY="@y">
+                                    </a>
+                                }
+                                else
+                                {
+                                    @if (piece != EGamePiece.Empty)
+                                    {
+                                        @piece
+                                    }
+                                    else
+                                    {
+                                        @Html.Raw("&nbsp;")
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                @if (piece != EGamePiece.Empty)
+                                {
+                                    @piece
+                                }
+                                else
+                                {
+                                    @Html.Raw("&nbsp;")
+                                }
+                            }
+                        </td>
+                    }
+                </tr>
+            }
+        </table>
+    </div>
+}
+else
+{
+    <div class="alert alert-warning">
+        <p>Cannot display the game board. Please start a new game.</p>
+    </div>
+}
+
+<div class="mt-3">
+    <form method="post" asp-page-handler="ResetGame" class="d-inline">
+        <input type="hidden" name="GameId" value="@Model.GameId" />
+        <button type="submit" class="btn btn-danger">Reset Game</button>
+    </form>
+    <a asp-page="Index" class="btn btn-link">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+    <script>
+        function letAiMove() {
+            const aiForm = document.getElementById("aiMoveForm");
+            if (aiForm) {
+                setTimeout(() => {
+                    aiForm.submit();
+                }, 1500);
+            } else {
+                alert("AI move form not found or the game is not in the correct state.");
+            }
+        }
+    </script>
+}

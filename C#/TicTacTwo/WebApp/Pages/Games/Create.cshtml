@@ -1,0 +1,108 @@
+@page
+@model WebApp.Pages.Games.CreateModel
+
+@{
+ViewData["Title"] = "Create";
+}
+
+<h1>Create New Game</h1>
+
+<h4>Game</h4>
+<hr />
+<div class="row">
+    <div class="col-md-6">
+        <form method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            
+            <div class="form-group">
+                <label asp-for="Game.GameName" class="control-label"></label>
+                <input asp-for="Game.GameName" class="form-control" />
+                <span asp-validation-for="Game.GameName" class="text-danger"></span>
+            </div>
+            
+            <div class="form-group">
+                <label asp-for="Game.ConfigId" class="control-label">Configuration</label>
+                <select asp-for="Game.ConfigId" class="form-control" asp-items="Model.ConfigSelectList" id="ConfigId">
+                    <option value="">-- Select Configuration --</option>
+                </select>
+                <span asp-validation-for="Game.ConfigId" class="text-danger"></span>
+            </div>
+            
+            <div class="form-group">
+                <label asp-for="Game.GameType" class="control-label"></label>
+                <select asp-for="Game.GameType" class="form-control" asp-items="Model.GameTypeSelectList">
+                    <option value="">-- Select Game Type --</option>
+                </select>
+                <span asp-validation-for="Game.GameType" class="text-danger"></span>
+            </div>
+            
+            <div class="form-group">
+                <label asp-for="Game.PlayerXPass" class="control-label">Player X Password (Optional)</label>
+                <input asp-for="Game.PlayerXPass" class="form-control" type="password" />
+                <span asp-validation-for="Game.PlayerXPass" class="text-danger"></span>
+            </div>
+            
+            <div class="form-group">
+                <label asp-for="Game.PlayerOPass" class="control-label">Player O Password (Optional)</label>
+                <input asp-for="Game.PlayerOPass" class="form-control" type="password" />
+                <span asp-validation-for="Game.PlayerOPass" class="text-danger"></span>
+            </div>
+            
+            <div class="form-group">
+                <label asp-for="Game.GameStateJson" class="control-label"></label>
+                <textarea asp-for="Game.GameStateJson" class="form-control" id="GameStateJson" rows="10" readonly></textarea>
+                <span asp-validation-for="Game.GameStateJson" class="text-danger"></span>
+            </div>
+            
+            <div class="form-group">
+                <label asp-for="Game.CreatedAt" class="control-label"></label>
+                <input asp-for="Game.CreatedAt" class="form-control" readonly />
+                <span asp-validation-for="Game.CreatedAt" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Game.ModifiedAt" class="control-label"></label>
+                <input asp-for="Game.ModifiedAt" class="form-control" readonly />
+                <span asp-validation-for="Game.ModifiedAt" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-page="Index" class="btn btn-secondary">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script>
+        document.getElementById('ConfigId').addEventListener('change', function () {
+            const configId = this.value;
+            const gameStateJson = document.getElementById('GameStateJson');
+
+            if (configId) {
+                fetch(`?handler=GameStateJson&configId=${configId}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            gameStateJson.value = data.gameStateJson;
+                        } else {
+                            gameStateJson.value = '';
+                            alert(data.message);
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error fetching game state JSON:', error);
+                        gameStateJson.value = '';
+                        alert('An error occurred while fetching the game state.');
+                    });
+            } else {
+                gameStateJson.value = '';
+            }
+        });
+    </script>
+}

@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Muuda kohvikut</title>
+  <link rel="stylesheet" href="../static/css/styles.css">
+</head>
+<body>
+  <h1>Muuda kohvikut</h1>
+
+  <form method="POST">
+    <label for="name">Nimi:</label>
+    <input type="text" id="name" name="name" value="{{ cafe.name }}"><br>
+
+    <label for="location">Aadress:</label>
+    <input type="text" id="location" name="location" value="{{ cafe.location }}"><br>
+
+    <label for="time_open">Avaneb:</label>
+    <input type="text" id="time_open" name="time_open" value="{{ cafe.time_open }}"><br>
+
+    <label for="time_closed">Sulgeb:</label>
+    <input type="text" id="time_closed" name="time_closed" value="{{ cafe.time_closed }}"><br>
+
+    <button type="submit">Salvesta</button>
+  </form>
+</body>
+</html>

@@ -1,0 +1,145 @@
+@page
+@model WebApp.Pages.Games.IndexModel
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Games List</h1>
+
+<p>
+    <a asp-page="Create" class="btn btn-primary">Create New</a>
+</p>
+
+<h2>Multiplayer Games</h2>
+@if (Model.MultiplayerGames != null && Model.MultiplayerGames.Count > 0)
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>@Html.DisplayNameFor(_ => Model.MultiplayerGames[0].GameName)</th>
+                <th>@Html.DisplayNameFor(_ => Model.MultiplayerGames[0].Config)</th>
+                <th>@Html.DisplayNameFor(_ => Model.MultiplayerGames[0].CreatedAt)</th>
+                <th>@Html.DisplayNameFor(_ => Model.MultiplayerGames[0].ModifiedAt)</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+        @foreach (var item in Model.MultiplayerGames)
+        {
+            <tr>
+                <td>@Html.DisplayFor(_ => item.GameName)</td>
+                <td>@Html.DisplayFor(_ => item.Config.ConfigName)</td>
+                <td>@Html.DisplayFor(_ => item.CreatedAt)</td>
+                <td>@Html.DisplayFor(_ => item.ModifiedAt)</td>
+                <td>
+                    <a asp-page="../JoinPlayer"
+                       asp-route-GameId="@item.Id"
+                       asp-route-PlayerRole="X"
+                       class="btn btn-primary">
+                        Join as Player X
+                    </a>
+                    <a asp-page="../JoinPlayer"
+                       asp-route-GameId="@item.Id"
+                       asp-route-PlayerRole="O"
+                       class="btn btn-primary">
+                        Join as Player O
+                    </a>
+                    <a asp-page="./Edit" class="btn btn-secondary" asp-route-id="@item.Id">Edit</a> 
+                    <a asp-page="./Details" class="btn btn-secondary" asp-route-id="@item.Id">Details</a> 
+                    <a asp-page="./Delete" class="btn btn-secondary" asp-route-id="@item.Id">Delete</a>
+                </td>
+            </tr>
+        }
+        </tbody>
+    </table>
+}
+else
+{
+    <p>No multiplayer games found.</p>
+}
+
+<h2>Player vs AI Games</h2>
+@if (Model.PlayerVsAiGames != null && Model.PlayerVsAiGames.Count > 0)
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>@Html.DisplayNameFor(_ => Model.PlayerVsAiGames[0].GameName)</th>
+                <th>@Html.DisplayNameFor(_ => Model.PlayerVsAiGames[0].Config)</th>
+                <th>@Html.DisplayNameFor(_ => Model.PlayerVsAiGames[0].CreatedAt)</th>
+                <th>@Html.DisplayNameFor(_ => Model.PlayerVsAiGames[0].ModifiedAt)</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+        @foreach (var item in Model.PlayerVsAiGames)
+        {
+            <tr>
+                <td>@Html.DisplayFor(_ => item.GameName)</td>
+                <td>@Html.DisplayFor(_ => item.Config.ConfigName)</td>
+                <td>@Html.DisplayFor(_ => item.CreatedAt)</td>
+                <td>@Html.DisplayFor(_ => item.ModifiedAt)</td>
+                <td>
+                    <a asp-page="../Multiplayer"
+                       asp-route-GameId="@item.Id"
+                       asp-route-PlayerRole="X"
+                       class="btn btn-primary">
+                        Play against AI
+                    </a>
+                    <a asp-page="./Edit" class="btn btn-secondary" asp-route-id="@item.Id">Edit</a> 
+                    <a asp-page="./Details" class="btn btn-secondary" asp-route-id="@item.Id">Details</a> 
+                    <a asp-page="./Delete" class="btn btn-secondary" asp-route-id="@item.Id">Delete</a>
+                </td>
+            </tr>
+        }
+        </tbody>
+    </table>
+}
+else
+{
+    <p>No player vs AI games found.</p>
+}
+
+<h2>AI vs AI Games</h2>
+@if (Model.AiVsAiGames != null && Model.AiVsAiGames.Count > 0)
+{
+    <table class="table">
+        <thead>
+        <tr>
+            <th>Game Name</th>
+            <th>Configuration</th>
+            <th>Created</th>
+            <th>Modified</th>
+            <th></th>
+        </tr>
+        </thead>
+        <tbody>
+        @foreach (var item in Model.AiVsAiGames)
+        {
+            <tr>
+                <td>@item.GameName</td>
+                <td>@item.Config?.ConfigName</td>
+                <td>@item.CreatedAt</td>
+                <td>@item.ModifiedAt</td>
+                <td>
+
+                    <a asp-page="../JoinPlayer"
+                       asp-route-GameId="@item.Id"
+                       asp-route-PlayerRole="Spectator"
+                       class="btn btn-primary">
+                        Spectate
+                    </a>
+                    <a asp-page="./Edit" class="btn btn-secondary" asp-route-id="@item.Id">Edit</a> 
+                    <a asp-page="./Details" class="btn btn-secondary" asp-route-id="@item.Id">Details</a> 
+                    <a asp-page="./Delete" class="btn btn-secondary" asp-route-id="@item.Id">Delete</a>
+                </td>
+            </tr>
+        }
+        </tbody>
+    </table>
+}
+else
+{
+    <p>No AI vs AI games found.</p>
+}

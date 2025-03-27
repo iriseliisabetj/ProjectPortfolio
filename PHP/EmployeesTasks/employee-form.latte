@@ -1,0 +1,49 @@
+
+{extends "base.latte"}
+
+{block content}
+    <body id="employee-form-page">
+    <main>
+        <div class="form-container">
+            <h2>{if $employee->id}Edit Employee{else}Add Employee{/if}</h2>
+
+            <form action="index.php?command=handle_employee" method="POST" enctype="multipart/form-data">
+                {if $employee->id}
+                    <input type="hidden" name="id" value="{$employee->id}">
+                {/if}
+
+                <div>
+                    <label for="firstName">First name:</label>
+                    <input type="text" id="firstName" name="firstName" value="{$employee->firstName}" required>
+                </div>
+
+                <div>
+                    <label for="lastName">Last name:</label>
+                    <input type="text" id="lastName" name="lastName" value="{$employee->lastName}" required>
+                </div>
+
+                <div>
+                    <label for="employeeImage">Upload Image:</label>
+                    <input type="file" id="employeeImage" name="picture">
+                </div>
+
+                <div>
+                    <button type="submit" name="submitButton" value="{if $employee->id}edit_employee{else}add_employee{/if}">Save</button>
+                    {if $employee->id}
+                        <button type="submit" name="deleteButton" value="delete_employee">Delete</button>
+                    {/if}
+                </div>
+
+                {if !empty($errors)}
+                    <div id="error-block">
+                        {foreach $errors as $error}
+                            {$error}<br />
+                        {/foreach}
+                    </div>
+                {/if}
+
+            </form>
+        </div>
+    </main>
+    </body>
+{/block}

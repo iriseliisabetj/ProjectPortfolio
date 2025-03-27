@@ -1,0 +1,63 @@
+@page
+@model WebApp.Pages.Configs.DeleteModel
+
+@{
+    ViewData["Title"] = "Delete";
+}
+
+<h1>Delete Configuration</h1>
+
+<h4>Are you sure you want to delete this configuration?</h4>
+<hr />
+<div class="row">
+    <div class="col-md-6">
+        <form method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <div class="form-group">
+                <label asp-for="Configuration.ConfigName" class="control-label"></label>
+                <input asp-for="Configuration.ConfigName" class="form-control" readonly />
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Configuration.BoardSizeWidth" class="control-label"></label>
+                <input asp-for="Configuration.BoardSizeWidth" class="form-control" readonly />
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Configuration.BoardSizeHeight" class="control-label"></label>
+                <input asp-for="Configuration.BoardSizeHeight" class="form-control" readonly />
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Configuration.GridSizeWidth" class="control-label"></label>
+                <input asp-for="Configuration.GridSizeWidth" class="form-control" readonly />
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Configuration.GridSizeHeight" class="control-label"></label>
+                <input asp-for="Configuration.GridSizeHeight" class="form-control" readonly />
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Configuration.WinCondition" class="control-label"></label>
+                <input asp-for="Configuration.WinCondition" class="form-control" readonly />
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Configuration.PiecesPerPlayer" class="control-label"></label>
+                <input asp-for="Configuration.PiecesPerPlayer" class="form-control" readonly />
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Configuration.MovePieceAfterNMoves" class="control-label"></label>
+                <input asp-for="Configuration.MovePieceAfterNMoves" class="form-control" readonly />
+            </div>
+
+            <div class="form-group">
+                <input type="submit" value="Delete" class="btn btn-danger" /> |
+                <a asp-page="Index" class="btn btn-secondary">Back to List</a>
+            </div>
+        </form>
+    </div>
+</div>

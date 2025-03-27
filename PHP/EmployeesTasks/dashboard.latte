@@ -1,0 +1,67 @@
+
+{extends "base.latte"}
+
+{block content}
+    <body id="dashboard-page">
+    <main class="dashboard-content">
+        <div class="dashboard-grid">
+            <section>
+                <h2>Employees</h2>
+                {if !empty($employees)}
+                    <div class="employee-list">
+                        {foreach $employees as $employee}
+                            <div class="employee-card">
+                                <div class="employee-image">
+                                    <img src="{$employee->picture}" alt="{$employee->firstName} {$employee->lastName}" data-employee-id="{$employee->id}">
+                                </div>
+                                <div class="employee-info">
+                                    <span data-employee-id="{$employee->id}" class="employee-name">
+                                        {$employee->firstName} {$employee->lastName}
+                                    </span>
+                                </div>
+                                <div>
+                                    <span class="employee-task-count" id="employee-task-count-{$employee->id}">{$employee->taskCount}</span>
+                                </div>
+                            </div>
+                        {/foreach}
+                    </div>
+                {else}
+                    <p>No employees found.</p>
+                {/if}
+            </section>
+
+            <section>
+                <h2>Tasks</h2>
+                {if !empty($tasks)}
+                    <div class="task-list">
+                        {foreach $tasks as $task}
+                            <div class="task">
+                                <div class="task-info">
+                                    <span data-task-id="{$task->id}">{$task->description}</span>
+                                </div>
+                                <div class="progress">
+                                    {for $i = 1; $i <= 5; $i++}
+                                        <span class="dot {if $i <= $task->estimate}filled{/if}"></span>
+                                    {/for}
+                                </div>
+
+                                <span class="task-status {$task->getStatus()}" id="task-state-{$task->id}">
+                                    {$task->getStatus()}
+                                </span>
+                            </div>
+                        {/foreach}
+                    </div>
+                {else}
+                    <p>No tasks found.</p>
+                {/if}
+            </section>
+        </div>
+    </main>
+
+    {if $successMessage}
+        <div id="message-block">
+            <strong>{$successMessage}</strong>
+        </div>
+    {/if}
+    </body>
+{/block}

@@ -1,0 +1,40 @@
+{extends 'base.latte'}
+
+{block content}
+    <body id="task-list-page">
+    <main>
+        <div class="page-content">
+            <h2>Tasks</h2>
+            {if !empty($tasks)}
+                <div class="task-list">
+                    {foreach $tasks as $task}
+                        <div class="task">
+                            <div class="task-info">
+                                <span data-task-id="{$task->id}">{$task->description}</span>
+                            </div>
+                            <a id="task-edit-link-{$task->id}" href="index.php?command=task_form&id={$task->id}">Edit</a>
+                            <div class="progress">
+                                {for $i = 1; $i <= 5; $i++}
+                                    <span class="dot {if $i <= $task->estimate}filled{/if}"></span>
+                                {/for}
+                            </div>
+
+                            <span class="task-status {$task->getStatus()}" id="task-state-{$task->id}">
+                                {$task->getStatus()}
+                            </span>
+                        </div>
+                    {/foreach}
+                </div>
+            {else}
+                <p>No tasks found.</p>
+            {/if}
+
+            {if $successMessage}
+                <div id="message-block">
+                    <strong>{$successMessage}</strong>
+                </div>
+            {/if}
+        </div>
+    </main>
+    </body>
+{/block}

@@ -1,0 +1,66 @@
+{extends "base.latte"}
+
+{block content}
+    <body id="task-form-page">
+    <main>
+        <div class="form-container">
+            <h2>{if $task->id}Edit Task{else}Add Task{/if}</h2>
+
+            <form action="index.php?command=handle_task" method="POST">
+                {if $task->id}
+                    <input type="hidden" name="id" value="{$task->id}">
+                {/if}
+
+                <div>
+                    <label for="description">Description:</label>
+                    <textarea id="description" name="description" required>{$task->description}</textarea>
+                </div>
+
+                <div>
+                    <label>Estimate:</label>
+                    <div class="radio-group">
+                        {for $i = 0; $i <= 5; $i++}
+                            <label class="radio-label" for="estimate-{$i}">
+                                <input type="radio" id="estimate-{$i}" name="estimate" value="{$i}" {if $task->estimate == $i}checked{/if}>
+                                <span class="radio-custom"></span>
+                            </label>
+                        {/for}
+                    </div>
+                </div>
+
+                <div>
+                    <label for="employeeId">Assign to Employee:</label>
+                    <select id="employeeId" name="employeeId" required>
+                        <option value="" {if !$task->employeeId}selected{/if}>Select an employee</option>
+                        {foreach $employees as $employee}
+                            <option value="{$employee->id}" {if $task->employeeId == $employee->id}selected{/if}>
+                                {$employee->firstName} {$employee->lastName}
+                            </option>
+                        {/foreach}
+                    </select>
+                </div>
+
+                <div>
+                    <label for="isCompleted">Completed:</label>
+                    <input type="checkbox" id="isCompleted" name="isCompleted" value="1" {if $task->isCompleted}checked{/if}>
+                </div>
+
+                <div>
+                    <button type="submit" name="submitButton" value="{if $task->id}edit_task{else}add_task{/if}">Save</button>
+                    {if $task->id}
+                        <button type="submit" name="deleteButton" value="delete_task">Delete</button>
+                    {/if}
+                </div>
+
+                {if !empty($errors)}
+                    <div id="error-block">
+                        {foreach $errors as $error}
+                            {$error}<br />
+                        {/foreach}
+                    </div>
+                {/if}
+            </form>
+        </div>
+    </main>
+    </body>
+{/block}

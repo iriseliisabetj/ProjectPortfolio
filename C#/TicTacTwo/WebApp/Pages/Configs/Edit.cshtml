@@ -1,0 +1,78 @@
+@page
+@model WebApp.Pages.Configs.EditModel
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<h1>Edit Configuration</h1>
+
+<h4>Configuration</h4>
+<hr />
+<div class="row">
+    <div class="col-md-6">
+        <form method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <div class="form-group">
+                <label asp-for="Configuration.ConfigName" class="control-label"></label>
+                <input asp-for="Configuration.ConfigName" class="form-control" readonly />
+                <span asp-validation-for="Configuration.ConfigName" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Configuration.BoardSizeWidth" class="control-label"></label>
+                <input asp-for="Configuration.BoardSizeWidth" class="form-control" />
+                <span asp-validation-for="Configuration.BoardSizeWidth" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Configuration.BoardSizeHeight" class="control-label"></label>
+                <input asp-for="Configuration.BoardSizeHeight" class="form-control" />
+                <span asp-validation-for="Configuration.BoardSizeHeight" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Configuration.GridSizeWidth" class="control-label"></label>
+                <input asp-for="Configuration.GridSizeWidth" class="form-control" />
+                <span asp-validation-for="Configuration.GridSizeWidth" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Configuration.GridSizeHeight" class="control-label"></label>
+                <input asp-for="Configuration.GridSizeHeight" class="form-control" />
+                <span asp-validation-for="Configuration.GridSizeHeight" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Configuration.WinCondition" class="control-label"></label>
+                <input asp-for="Configuration.WinCondition" class="form-control" />
+                <span asp-validation-for="Configuration.WinCondition" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Configuration.PiecesPerPlayer" class="control-label"></label>
+                <input asp-for="Configuration.PiecesPerPlayer" class="form-control" />
+                <span asp-validation-for="Configuration.PiecesPerPlayer" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Configuration.MovePieceAfterNMoves" class="control-label"></label>
+                <input asp-for="Configuration.MovePieceAfterNMoves" class="form-control" />
+                <span asp-validation-for="Configuration.MovePieceAfterNMoves" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-page="Index" class="btn btn-secondary">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

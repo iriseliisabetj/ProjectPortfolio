@@ -1,0 +1,38 @@
+{extends "base.latte"}
+
+{block content}
+    <body id="employee-list-page">
+    <main>
+        <div class="page-content">
+            <h2>Employee List</h2>
+            {if !empty($employees)}
+                <div class="employee-list">
+                    {foreach $employees as $employee}
+                        <div class="employee-card">
+                            <div class="employee-image">
+                                <img src="{$employee->picture}" alt="{$employee->firstName} {$employee->lastName}" data-employee-id="{$employee->id}">
+                            </div>
+                            <div class="employee-info">
+                                <span data-employee-id="{$employee->id}" class="employee-name">
+                                    {$employee->firstName} {$employee->lastName}
+                                </span>
+                            </div>
+                            <span class="link">
+                                <a id="employee-edit-link-{$employee->id}" href="index.php?command=employee_form&id={$employee->id}">Edit</a>
+                            </span>
+                        </div>
+                    {/foreach}
+                </div>
+            {else}
+                <p>No employees found.</p>
+            {/if}
+
+            {if $successMessage}
+                <div id="message-block">
+                    {$successMessage}<br />
+                </div>
+            {/if}
+        </div>
+    </main>
+    </body>
+{/block}

@@ -1,0 +1,28 @@
+@page
+@using GameBrain
+@model WebApp.Pages.Multiplayer
+
+@{
+    ViewData["Title"] = "Multiplayer Game Landing";
+}
+
+<h1>@Model.Game.GameName</h1>
+<p>Game Type: @Model.Game.GameType</p>
+
+@if (@Model.Game.GameType == GameType.Multiplayer)
+{
+    <div class="mt-4">
+        <a asp-page="JoinPlayer" asp-route-GameId="@Model.Game.Id" asp-route-PlayerRole="X" class="btn btn-primary">Join as Player X</a>
+        <a asp-page="JoinPlayer" asp-route-GameId="@Model.Game.Id" asp-route-PlayerRole="O" class="btn btn-secondary">Join as Player O</a>
+    </div>
+}
+@if (@Model.Game.GameType == GameType.PlayerVsAi)
+{
+    <div class="mt-4">
+        <a asp-page="JoinPlayer" asp-route-GameId="@Model.Game.Id" asp-route-PlayerRole="X" class="btn btn-primary">Play Against AI as X</a>
+    </div>
+}
+
+<div class="mt-3">
+    <a asp-page="Index">Back to List</a>
+</div>
